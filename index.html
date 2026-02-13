@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Valentine's Day ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Parisienne&family=Macondo:wght@400&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100vh; width:100vw; overflow:hidden; }
+    body { 
+      font-family:'Parisienne', cursive; 
+      color:#fff; 
+      background:#000; 
+      transition: background 2s ease;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    body.love { 
+      background: linear-gradient(135deg,#ff9a9e,#fad0c4,#ff758c); 
+      background-size:300% 300%; 
+      animation:softGradient 18s ease infinite; 
+    }
+    body.bgImage {
+      background-image: url('bg.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      animation: none;
+    }
+    @keyframes softGradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    .container { 
+      position:absolute; 
+      inset:0; 
+      z-index:10; 
+      display:flex; 
+      flex-direction:column; 
+      align-items:center; 
+      justify-content:center; 
+      text-align:center;
+      padding:2rem;
+    }
+
+    .hidden { display:none !important; }
+
+    h1.title {
+      font-family: 'Macondo', 'Great Vibes', cursive;
+      font-size:clamp(3rem,10vw,7rem);
+      text-shadow:0 0 40px #ff69b4;
+      animation:pulse 2s infinite, colorShift 5s linear infinite;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+    .message, .poem {
+      font-size:clamp(2rem,6vw,3.5rem);
+      line-height:1.6;
+      margin:2rem 0;
+      text-shadow:0 0 25px #ff69b4;
+      animation: colorShift 5s linear infinite;
+    }
+
+    .fade-out {
+      animation: fadeOut 3s ease-out forwards;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes colorShift {
+      0% { color: #ff69b4; }
+      40% { color: #ff6b9d; }
+      100% { color: #ff69b4; }
+    }
+
+    .glow-effect {
+      text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4; }
+      50% { text-shadow: 0 0 30px #ff69b4, 0 0 40px #ff69b4; }
+    }
+
+    .pulsing-glow {
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 2s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .bounce-in {
+      animation: bounceIn 1s ease-out;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .gradient-text {
+      background: linear-gradient(45deg, #ff69b4, #ff6b9d);
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .button {
+      padding:1rem 3rem;
+      font-size:clamp(1.6rem,5vw,2.2rem);
+      background: linear-gradient(135deg, #ff69b4, #ff4757, #ff1493);
+      border: 2px solid #ff1493;
+      border-radius:50px;
+      color:#fff;
+      cursor:pointer;
+      box-shadow: 0 0 20px rgba(255,105,180,0.8), 0 10px 30px rgba(255,71,87,0.6), inset 0 0 20px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      margin:1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .button:hover::before {
+      left: 100%;
+    }
+    .button:hover { 
+      transform: scale(1.12) translateY(-2px);
+      box-shadow: 0 0 30px rgba(255,105,180,1), 0 15px 50px rgba(255,71,87,0.9), inset 0 0 30px rgba(255,255,255,0.15);
+      background: linear-gradient(135deg, #ff1493, #ff4757, #ff69b4);
+    }
+    .button:active {
+      transform: scale(1.08) translateY(0px);
+    }
+
+    .big-heart {
+      font-size:12rem;
+      background:none;
+      box-shadow:none;
+      animation:pulse 1.5s infinite;
+    }
+
+    /* Horizontal swipeable gallery */
+    #gallery {
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      gap:1.5rem;
+      padding:2rem 0;
+      width:100%;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    #gallery::-webkit-scrollbar { display:none; }
+    .gallery-item {
+      flex:0 0 85vw;
+      scroll-snap-align:center;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(255,105,180,0.6);
+      opacity:0;
+      transform:translateY(50px);
+      animation:rollIn 0.8s forwards;
+    }
+    .gallery-item:nth-child(1) { animation-delay:0.1s; }
+    .gallery-item:nth-child(2) { animation-delay:0.3s; }
+    .gallery-item:nth-child(3) { animation-delay:0.5s; }
+    .gallery-item:nth-child(4) { animation-delay:0.7s; }
+    .gallery-item:nth-child(5) { animation-delay:0.9s; }
+    @keyframes rollIn { to { opacity:1; transform:translateY(0); } }
+
+    .gallery-item img, .gallery-item video { width:100%; height:auto; display:block; }
+
+    #fadeOverlay {
+      position:fixed; inset:0; background:#000; opacity:0; z-index:30; 
+      pointer-events:none; transition:opacity 6s;
+    }
+
+    #floatingHeartsContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .floating-heart {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.8;
+      animation: floatUp 6s ease-in infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    .sticker {
+      position: fixed;
+      pointer-events: none;
+      z-index: 8;
+      opacity: 0.9;
+      animation: stickerFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes stickerFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    .sticker.fade-out {
+      animation: stickerFadeOut 0.8s ease-out forwards;
+    }
+
+    @keyframes stickerFadeOut {
+      to { opacity: 0; transform: scale(0.8); }
+    }
+
+    /* ========== ACTIVITY & DATE SECTION ========== */
+    #activitySection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: 90vw;
+      overflow-y: auto;
+      max-height: 85vh;
+      padding-bottom: 2rem;
+    }
+
+    #activityQuestion {
+      font-family: 'Macondo', 'Great Vibes', cursive;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      text-shadow: 0 0 30px #ff69b4;
+      animation: colorShift 5s linear infinite;
+      margin-top: 1rem;
+    }
+
+    .activities-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      padding: 1.5rem;
+      justify-items: center;
+    }
+
+    .activity-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+    }
+
+    .activity-item img {
+      width: 120px;
+      height: 120px;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.5);
+      transition: all 0.3s;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .activity-item:hover img {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 12px 35px rgba(255, 69, 87, 0.8);
+      border: 3px solid #ff69b4;
+    }
+
+    .activity-item label {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      color: #fff;
+      text-shadow: 0 0 15px #ff69b4;
+      transition: all 0.3s;
+    }
+
+    .activity-item input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      accent-color: #ff69b4;
+      transition: transform 0.2s;
+    }
+
+    .activity-item input[type="checkbox"]:checked {
+      transform: scale(1.2);
+    }
+
+    .activity-item label:hover {
+      text-shadow: 0 0 25px #ff4757;
+      transform: scale(1.05);
+    }
+
+    /* Date & Time Picker Styling */
+    .meet-date-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 1.5rem;
+      background: rgba(255,105,180,0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(255,105,180,0.3);
+      margin: 1rem 0;
+    }
+
+    .meet-date-container label {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #ff69b4;
+    }
+
+    input[type="datetime-local"] {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.4rem;
+      border: 2px solid #ff69b4;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      text-align: center;
+      font-family: 'Parisienne', cursive;
+    }
+
+    input[type="datetime-local"]:focus {
+      outline: none;
+      box-shadow: 0 0 15px #ff69b4;
+      border-color: #ff1493;
+    }
+
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+
+#activitySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;  /* Compact for mobile */
+  width: 100%;
+  max-width: 90vw;
+  overflow-y: auto;
+  max-height: 85vh;
+  padding: 1rem 0 8rem 0;  /* Extra bottom padding to avoid overlap with fixed button */
+  position: relative;  /* Keeps internal positioning intact */
+}
+
+.meet-date-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.2rem;  /* Slightly reduced for tightness */
+  background: rgba(255,105,180,0.08);
+  border-radius: 20px;
+  border: 1px solid rgba(255,105,180,0.3);
+  margin: 0.5rem 0;
+}
+
+#activityConfirm {
+  padding: 1rem 3rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  background: linear-gradient(135deg, #ff69b4, #ff4757);
+  border: 2px solid #ff1744;
+  border-radius: 50px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(255, 71, 87, 0.6);
+  transition: all 0.3s;
+  font-family: 'Parisienne', cursive;
+  font-weight: bold;
+  position: fixed;  /* Changed to fixed for screen-bottom sticking */
+  bottom: 1.5rem;  /* Positions it near the bottom of the screen */
+  left: 50%;  /* Centers it horizontally */
+  transform: translateX(-50%);  /* Precise centering */
+  z-index: 50;  /* High z-index to stay on top of everything */
+  width: auto;  /* Not full-width, keeps button shape */
+  margin: 0 auto;  /* Extra centering help */
+}
+
+#activityConfirm:hover {
+  transform: scale(1.1) translateX(-50%);  /* Adjusted for centering on hover */
+  box-shadow: 0 15px 40px rgba(255, 105, 180, 0.9);
+}
+
+#activityConfirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateX(-50%);  /* Keeps centered when disabled */
+}
+  </style>
+</head>
+<body class="bgImage">
+  <div id="fadeOverlay"></div>
+
+  <div id="floatingHeartsContainer"></div>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="Moonlight.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <button id="startBtn" class="button">click here for surprise</button>
+
+    <h1 id="valentineWish" class="title hidden">HAPPY VALENTINE'S DAY LOVE ❤️</h1>
+    <button id="openSurprise" class="button hidden">Open your surprise</button>
+
+    <div id="typedMessage" class="message hidden"></div>
+    <button id="memoriesBtn" class="button hidden">Our Memories</button>
+
+    <div id="gallery" class="hidden">
+      <div class="gallery-item"><img src="1.jpg" alt="Memory 1"></div>
+      <div class="gallery-item"><img src="2.jpg" alt="Memory 2"></div>
+    </div>
+    <button id="keepGoing" class="button hidden">keep going</button>
+
+    <p id="readyText" class="message hidden">I hope you are ready for this</p>
+    <button id="heartBtn" class="button big-heart hidden">❤️</button>
+
+    <h1 id="questionText" class="title hidden">Will you be my valentine?</h1>
+    <div id="choiceButtons" class="hidden">
+      <button id="yesBtn" class="button">Yes ❤️</button>
+      <button id="noBtn" class="button">No 😔</button>
+    </div>
+
+    <!-- Yes path -->
+    <div id="yesSection" class="hidden">
+      <h1 class="title">I knew it you'll say yes ✨</h1>
+      <div id="poemYes" class="poem"></div>
+      <button id="continueBtn" class="button hidden">What are we doing?</button>
+    </div>
+
+    <!-- Activity + Date Selection -->
+    <div id="activitySection" class="hidden">
+      <div id="activityQuestion"><b>What are we doing after? 💫</b></div>
+      
+      <div class="activities-selection">
+        <div class="activity-item">
+          <img src="aquarium.jpeg" alt="aquarium" />
+          <label><input type="checkbox" name="activities" value="aquarium" /> Aquarium 🐠</label>
+        </div>
+        <div class="activity-item">
+          <img src="arcade.jpeg" alt="arcade" />
+          <label><input type="checkbox" name="activities" value="arcade" /> Arcade 🎮</label>
+        </div>
+        <div class="activity-item">
+          <img src="cinema.jpeg" alt="cinema" />
+          <label><input type="checkbox" name="activities" value="cinema" /> Cinema 🍿</label>
+        </div>
+        <div class="activity-item">
+          <img src="exhibition.jpeg" alt="exhibition" />
+          <label><input type="checkbox" name="activities" value="exhibition" /> Exhibition 🖼️</label>
+        </div>
+        <div class="activity-item">
+          <img src="cuddle.jpeg" alt="cuddle" />
+          <label><input type="checkbox" name="activities" value="cuddle" /> Cuddle 💞</label>
+        </div>
+        <div class="activity-item">
+          <img src="park.jpeg" alt="park" />
+          <label><input type="checkbox" name="activities" value="park" /> Park 🌳</label>
+        </div>
+      </div>
+
+      <!-- Date & Time Picker -->
+      <div class="meet-date-container">
+        <label for="meetDateTime">When should we meet, baby? 💕📅</label>
+        <input type="datetime-local" id="meetDateTime" name="meet_datetime" required>
+      </div>
+
+      <button id="activityConfirm" class="button" disabled>Confirm Choices ❤️</button>
+    </div>
+
+    <!-- No path -->
+    <div id="noSection" class="hidden">
+      <h1 style="font-size:15rem; margin:2rem;">💔</h1>
+      <p id="sadMessage" class="message">it's ok maybe you don't feel the same<br>wait this poem is for you</p>
+      <div id="poemNo" class="poem"></div>
+    </div>
+  </div>
+
+  <form id="responseForm" style="display:none;">
+    <input type="hidden" name="access_key" value="1f8418ae-9d6a-4e60-8437-181ec4b40186">
+    <input type="hidden" name="subject" value="Valentine's Day Response from Priya">
+    <input type="hidden" name="from_name" value="Valentine Surprise Site">
+    <input type="email" name="email" value="nanaloao3@gmail.com" style="display:none;">
+    
+    <!-- Filled by JS -->
+    <input type="hidden" name="response" id="responseValue">
+    <input type="hidden" name="activities" id="activitiesValue">
+    <input type="hidden" name="meet_datetime" id="meetDateTimeValue">
+  </form>
+
+<script>
+  // ================== ELEMENTS ==================
+  const $ = id => document.getElementById(id);
+  const startBtn       = $('startBtn');
+  const valentineWish  = $('valentineWish');
+  const openSurprise   = $('openSurprise');
+  const typedMessage   = $('typedMessage');
+  const memoriesBtn    = $('memoriesBtn');
+  const gallery        = $('gallery');
+  const keepGoing      = $('keepGoing');
+  const readyText      = $('readyText');
+  const heartBtn       = $('heartBtn');
+  const questionText   = $('questionText');
+  const choiceButtons  = $('choiceButtons');
+  const yesSection     = $('yesSection');
+  const noSection      = $('noSection');
+  const poemYes        = $('poemYes');
+  const poemNo         = $('poemNo');
+  const fadeOverlay    = $('fadeOverlay');
+  const bgMusic        = $('bgMusic');
+  const continueBtn    = $('continueBtn');
+  const responseForm   = $('responseForm');
+  const responseValue  = $('responseValue');
+  const sadMessage     = $('sadMessage');
+  const floatingHeartsContainer = $('floatingHeartsContainer');
+  const activitySection = $('activitySection');
+  const activityConfirm = $('activityConfirm');
+  const activityCheckboxes = document.querySelectorAll('input[name="activities"]');
+  const meetDateInput  = $('meetDateTime');
+  const activitiesValue   = $('activitiesValue');
+  const meetDateTimeValue = $('meetDateTimeValue');
+
+  // ================== FLOATING HEARTS ==================
+  let heartCount = 10;
+  const maxHearts = 800;
+  let heartInterval = null;
+  const hearts = ['❤️', '💞', '💕'];
+
+  // Set min date to now
+  if (meetDateInput) {
+    const now = new Date().toISOString().slice(0, 16);
+    meetDateInput.min = now;
+  }
+
+  // Enable/disable confirm button based on selection
+  function updateConfirmButton() {
+    const anyActivity = Array.from(activityCheckboxes).some(cb => cb.checked);
+    const hasDate = meetDateInput?.value;
+    activityConfirm.disabled = !(anyActivity || hasDate);
+  }
+
+  activityCheckboxes.forEach(cb => cb.addEventListener('change', updateConfirmButton));
+  if (meetDateInput) meetDateInput.addEventListener('change', updateConfirmButton);
+
+  // Play music on first interaction
+  document.body.addEventListener('click', () => {
+    bgMusic.play().catch(() => console.log('Audio blocked - waiting for interaction'));
+  }, { once: true });
+
+  function createFloatingHeart() {
+    if (heartCount >= maxHearts) return;
+    heartCount++;
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+    floatingHeartsContainer.appendChild(heart);
+    setTimeout(() => { heart.remove(); heartCount--; }, 10000);
+  }
+
+  const lovePoem = `In your eyes, my world begins anew,<br>
+                   Forever yours, in every hue.<br>
+                   With every beat, my love grow true,<br>
+                   Priya, I'm endlessly in love with you. 💞`;
+
+  function sendResponse() {
+    if (!responseForm) return;
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: new FormData(responseForm)
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) console.log('Response sent!');
+      else console.error('Error:', data.message);
+    })
+    .catch(err => console.error('Fetch error:', err));
+  }
+
+  // ================== FLOW ==================
+  startBtn.onclick = () => {
+    document.body.classList.add('love');
+    document.body.classList.add('bgImage');
+    document.querySelectorAll('.sticker').forEach(s => s.classList.add('fade-out'));
+    startBtn.classList.add('hidden');
+    valentineWish.classList.remove('hidden');
+    openSurprise.classList.remove('hidden');
+    if (!heartInterval) heartInterval = setInterval(createFloatingHeart, 800);
+  };
+
+  openSurprise.onclick = () => {
+    valentineWish.classList.add('hidden');
+    openSurprise.classList.add('hidden');
+    typedMessage.classList.remove('hidden');
+    document.body.classList.add('bgImage');
+    bgMusic.play().catch(() => {});
+
+    new Typed('#typedMessage', {
+      strings: ["From the first moment i saw your smile...^1500<br>My heart knew you were the one.^1500<br>I love you more every single day ❤️"],
+      typeSpeed: 60,
+      showCursor: false,
+      onComplete: () => memoriesBtn.classList.remove('hidden')
+    });
+  };
+
+  memoriesBtn.onclick = () => {
+    typedMessage.classList.add('hidden');
+    memoriesBtn.classList.add('hidden');
+    gallery.classList.remove('hidden');
+  };
+
+  gallery.addEventListener('scroll', () => {
+    if (gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth - 30) {
+      keepGoing.classList.remove('hidden');
+    }
+  });
+
+  keepGoing.onclick = () => {
+    gallery.classList.add('hidden');
+    keepGoing.classList.add('hidden');
+    readyText.classList.remove('hidden');
+    heartBtn.classList.remove('hidden');
+  };
+
+  heartBtn.onclick = () => {
+    readyText.classList.add('hidden');
+    heartBtn.classList.add('hidden');
+    questionText.classList.remove('hidden');
+    setTimeout(() => choiceButtons.classList.remove('hidden'), 1500);
+  };
+
+  $('yesBtn').onclick = () => {
+    responseValue.value = 'Yes ❤️';
+    sendResponse();
+
+    choiceButtons.classList.add('hidden');
+    questionText.classList.add('hidden');
+    yesSection.classList.remove('hidden');
+    confetti({ particleCount: 400, spread: 100, origin: { y: 0.6 } });
+
+    new Typed('#poemYes', {
+      strings: [lovePoem],
+      typeSpeed: 80,
+      showCursor: false,
+      onComplete: () => {
+        setTimeout(() => continueBtn.classList.remove('hidden'), 2000);
+      }
+    });
+  };
+
+  continueBtn.onclick = () => {
+    yesSection.classList.add('hidden');
+    continueBtn.classList.add('hidden');
+    activitySection.classList.remove('hidden');
+    confetti({ particleCount: 200, spread: 80, origin: { y: 0.5 } });
+    updateConfirmButton();
+  };
+
+  activityConfirm.onclick = () => {
+    const selectedActivities = Array.from(activityCheckboxes)
+      .filter(cb => cb.checked)
+      .map(cb => cb.value)
+      .join(', ') || "None selected";
+
+    const selectedDateTime = meetDateInput.value || "Not selected";
+
+    // Fill form fields
+    responseValue.value = "Yes ❤️";
+    activitiesValue.value = selectedActivities;
+    meetDateTimeValue.value = selectedDateTime;
+
+    // Send to your email
+    sendResponse();
+
+    confetti({ particleCount: 500, spread: 120, origin: { y: 0.6 } });
+    alert(`Yayy my love! 💖\n\nActivities: ${selectedActivities}\nWhen: ${selectedDateTime || "Whenever you're free"}\n\nI'm counting the seconds until we meet! 🌹❤️`);
+
+    setTimeout(() => location.reload(), 4000);
+  };
+
+  $('noBtn').onclick = () => {
+    responseValue.value = 'No 😔';
+    sendResponse();
+
+    choiceButtons.classList.add('hidden');
+    questionText.classList.add('hidden');
+    noSection.classList.remove('hidden');
+
+    setTimeout(() => {
+      sadMessage.classList.add('fade-out');
+      setTimeout(() => {
+        new Typed('#poemNo', {
+          strings: [lovePoem],
+          typeSpeed: 80,
+          showCursor: false,
+          onComplete: () => {
+            setTimeout(() => {
+              fadeOverlay.style.opacity = '1';
+              fadeOverlay.style.pointerEvents = 'auto';
+            }, 2000);
+          }
+        });
+      }, 3000);
+    }, 3000);
+  };
+</script>
+</body>
+</html>
